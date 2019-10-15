@@ -71,5 +71,26 @@ public class BankingTest {
 		ds.setUser("sa");
 		ds.setPassword("sa");
 		return ds;
-	}	
+	}
+        
+        /**
+         * Test si le compte passe en négatif ou non
+         * @throws Exception 
+         */
+        @Test
+        public void negativeAccount() throws Exception {
+            int fromCustomer = 0;
+            int toCustomer = 1;
+            int amount = 101;
+            float before0 = myDAO.balanceForCustomer(fromCustomer);
+            float before1 = myDAO.balanceForCustomer(toCustomer);
+            try {
+                myDAO.bankTransferTransaction(fromCustomer,toCustomer,amount);
+                fail();
+                
+            } catch(Exception ex) { // La contriante d'intégrité sur le montant du compte est censé renvoyer une exception
+                assertEquals("Balance incorrecte !", before0, myDAO.balanceForCustomer(fromCustomer),0.001f);	
+                assertEquals("Balance incorrecte !", before1, myDAO.balanceForCustomer(toCustomer),0.001f);
+            }
+        }
 }
